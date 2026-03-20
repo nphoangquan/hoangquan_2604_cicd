@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giới thiệu bản thân</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Color plan tham khảo */
+            --bg-main: #070707;
+            --bg-section: #0D0D0D;
+            --bg-card: #111111;
+            --border: #191919;
+            
+            --accent: #ff7400;
+            --accent-hover: #ff9a00;
+            --accent-highlight: #ffc100;
+            
+            --text-main: #ffffff;
+            --text-secondary: #b3b3b3;
+            --text-muted: #6b6b6b;
+            
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* --- Navbar --- */
+        .navbar {
+            background: var(--bg-section);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar-inner {
+            max-width: 680px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-main);
+        }
+
+        .navbar-brand span {
+            color: var(--accent);
+        }
+
+        /* --- Layout --- */
+        .page {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        @media (min-width: 640px) {
+            .page {
+                padding: 3rem 2rem;
+            }
+        }
+
+        /* --- Hero với gradient cam --- */
+        .hero {
+            text-align: center;
+            padding: 2.5rem 1.5rem;
+            margin-bottom: 2rem;
+            background: var(--bg-section);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-highlight));
+            opacity: 0.9;
+        }
+
+        .hero-avatar {
+            width: 88px;
+            height: 88px;
+            margin: 0 auto 1.25rem;
+            border-radius: 50%;
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--accent);
+        }
+
+        .hero-name {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 0.25rem;
+        }
+
+        .hero-subtitle {
+            font-size: 0.95rem;
+            color: var(--accent);
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .hero-bio {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        /* --- Info Grid --- */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        @media (min-width: 480px) {
+            .info-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .info-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1rem 1.25rem;
+            text-align: center;
+            transition: border-color 0.2s;
+        }
+
+        .info-card:hover {
+            border-color: var(--accent);
+        }
+
+        .info-card i {
+            display: block;
+            font-size: 1.25rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .info-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.25rem;
+        }
+
+        .info-value {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-main);
+            word-break: break-word;
+        }
+
+        /* --- Section --- */
+        .section {
+            margin-bottom: 2.5rem;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title i {
+            color: var(--accent);
+            font-size: 1rem;
+        }
+
+        /* --- Tech Stack: Sliding animation (marquee) --- */
+        .tech-section {
+            overflow: hidden;
+            padding: 1rem 0;
+            margin-bottom: 0.5rem;
+        }
+
+        .tech-marquee {
+            display: flex;
+            width: max-content;
+            animation: slide-tech 25s linear infinite;
+        }
+
+        .tech-marquee:hover {
+            animation-play-state: paused;
+        }
+
+        .tech-group {
+            display: flex;
+            gap: 1rem;
+            flex-shrink: 0;
+            padding-right: 1rem;
+        }
+
+        .tech-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            white-space: nowrap;
+            transition: 0.2s;
+        }
+
+        .tech-tag:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        @keyframes slide-tech {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* --- Todo Section --- */
+        .todo-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .todo-form {
+            display: flex;
+            gap: 0.75rem;
+            padding: 1.25rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .todo-input {
+            flex: 1;
+            min-width: 0;
+            background: var(--bg-section);
+            border: 1px solid var(--border);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            color: var(--text-main);
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: border-color 0.2s;
+        }
+
+        .todo-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .todo-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .btn-add {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 0 1.25rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: background 0.2s;
+        }
+
+        .btn-add:hover {
+            background: var(--accent-hover);
+        }
+
+        .todo-list {
+            list-style: none;
+            padding: 1rem 1.25rem;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 0.875rem 0;
+            border-bottom: 1px solid var(--border);
+            min-height: 48px;
+        }
+
+        .todo-item:last-child {
+            border-bottom: none;
+        }
+
+        .todo-text {
+            flex: 1;
+            min-width: 0;
+            font-size: 0.95rem;
+            color: var(--text-main);
+        }
+
+        .todo-item.completed .todo-text {
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
+
+        .todo-actions {
+            display: flex;
+            gap: 0.25rem;
+            flex-shrink: 0;
+        }
+
+        .todo-actions form {
+            display: inline;
+        }
+
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            border-radius: 8px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+
+        .btn-icon:hover {
+            background: var(--bg-section);
+            color: var(--text-main);
+        }
+
+        .btn-delete:hover {
+            color: #e57373;
+        }
+
+        .empty-todo {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .empty-todo i {
+            display: block;
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <span class="navbar-brand">GIỚI THIỆU BẢN THÂN<span>.</span></span>
+        </div>
+    </nav>
+
+    <div class="page">
+        <!-- Hero -->
+        <header class="hero">
+            <div class="hero-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <h1 class="hero-name" th:text="${name}">Nguyen Phan Hoang Quan</h1>
+            <p class="hero-subtitle">Sinh viên Công nghệ thông tin</p>
+            <p class="hero-bio" th:text="${bio}">Sinh viên ngành Công nghệ thông tin.</p>
+        </header>
+
+        <!-- Info Grid -->
+        <div class="info-grid">
+            <div class="info-card">
+                <i class="fas fa-id-card"></i>
+                <div class="info-label">MSSV</div>
+                <div class="info-value" th:text="${mssv}">2280602604</div>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-users"></i>
+                <div class="info-label">Lớp</div>
+                <div class="info-value" th:text="${lop}">22DTHH2</div>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-envelope"></i>
+                <div class="info-label">Email</div>
+                <div class="info-value" th:text="${email}">hq16101971@gmail.com</div>
+            </div>
+            <div class="info-card">
+                <i class="fas fa-phone"></i>
+                <div class="info-label">Điện thoại</div>
+                <div class="info-value" th:text="${phone}">0333333333</div>
+            </div>
+        </div>
+
+        <!-- Tech Stack - Sliding animation -->
+        <section class="section">
+            <h2 class="section-title">
+                <i class="fas fa-code"></i>
+                Công nghệ sử dụng
+            </h2>
+            <div class="tech-section">
+                <div class="tech-marquee">
+                    <div class="tech-group">
+                        <span class="tech-tag"><i class="fab fa-java"></i> Java</span>
+                        <span class="tech-tag"><i class="fas fa-leaf"></i> Spring Boot</span>
+                        <span class="tech-tag"><i class="fab fa-docker"></i> Docker</span>
+                        <span class="tech-tag"><i class="fas fa-database"></i> MySQL</span>
+                        <span class="tech-tag"><i class="fab fa-html5"></i> HTML5</span>
+                        <span class="tech-tag"><i class="fab fa-css3-alt"></i> CSS3</span>
+                        <span class="tech-tag"><i class="fab fa-git-alt"></i> Git</span>
+                    </div>
+                    <div class="tech-group">
+                        <span class="tech-tag"><i class="fab fa-java"></i> Java</span>
+                        <span class="tech-tag"><i class="fas fa-leaf"></i> Spring Boot</span>
+                        <span class="tech-tag"><i class="fab fa-docker"></i> Docker</span>
+                        <span class="tech-tag"><i class="fas fa-database"></i> MySQL</span>
+                        <span class="tech-tag"><i class="fab fa-html5"></i> HTML5</span>
+                        <span class="tech-tag"><i class="fab fa-css3-alt"></i> CSS3</span>
+                        <span class="tech-tag"><i class="fab fa-git-alt"></i> Git</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Todo List -->
+        <section class="section">
+            <h2 class="section-title">
+                <i class="fas fa-tasks"></i>
+                Danh sách công việc
+            </h2>
+            <div class="todo-card">
+                <form class="todo-form" th:action="@{/todos}" method="post">
+                    <input type="text" name="title" class="todo-input" placeholder="Thêm công việc mới..." required autocomplete="off">
+                    <button type="submit" class="btn-add">Thêm</button>
+                </form>
+
+                <ul class="todo-list">
+                    <th:block th:if="${#lists.isEmpty(todos)}">
+                        <li class="empty-todo">
+                            <i class="fas fa-clipboard-list"></i>
+                            Chưa có công việc nào. Hãy thêm mới!
+                        </li>
+                    </th:block>
+
+                    <li th:each="todo : ${todos}" class="todo-item" th:classappend="${todo.completed} ? 'completed'">
+                        <span class="todo-text" th:text="${todo.title}">Task</span>
+                        <div class="todo-actions">
+                            <form th:if="${!todo.completed}" th:action="@{/todos/{id}/complete(id=${todo.id})}" method="post">
+                                <button type="submit" class="btn-icon" title="Hoàn thành">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                            </form>
+                            <form th:action="@{/todos/{id}/delete(id=${todo.id})}" method="post">
+                                <button type="submit" class="btn-icon btn-delete" title="Xóa">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+    </div>
+</body>
+</html>
